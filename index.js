@@ -69,7 +69,7 @@ function dnsmiddleware(req,res,next){
   dns.lookup(url.hostname,options,(err,address,family)=>{
     if(err){
       console.log(err)
-      res.json({"error":"Invalid URL"})
+      res.json({"error":"invalid url"})
     }else{
       next()
     }
@@ -81,7 +81,10 @@ function dnsmiddleware(req,res,next){
   app.post('/api/shorturl/',dnsmiddleware,async (req, res) => {
     const {url}=req.body
     const result=await Url.create({originalUrl:url})
-    res.json(result)
+    res.json({
+      original_url: result.originalUrl,
+      short_url: result.shortUrl
+    })
     
     
   });
